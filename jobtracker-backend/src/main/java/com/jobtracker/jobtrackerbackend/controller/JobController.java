@@ -34,11 +34,17 @@ public class JobController {
 
         String title = body.get("jobTitle");
         String description = body.get("jobDescription");
-        Integer userId = Integer.parseInt(body.get("userId"));
         String notes = body.get("notes");
         String status = body.get("status");
+        Integer userId;
 
-        if (title == null || description == null || userId == null || notes == null || status == null) {
+        try {
+            userId = Integer.parseInt(body.get("userId"));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid user ID");
+        }
+
+        if (title == null || description == null || notes == null || status == null) {
             return ResponseEntity.badRequest().body("Missing required fields");
         }
         User user = userReposotory.findById(userId).orElse(null);
@@ -49,6 +55,12 @@ public class JobController {
 
         jobRepository.save(job);
         return ResponseEntity.ok(job);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteJob(@PathVariable Integer id){
+        jobRepository.deleteById(id);
+        return ResponseEntity.ok("Job deleted");
     }
 
 

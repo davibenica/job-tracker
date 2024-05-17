@@ -73,6 +73,13 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id){
+        userReposotory.deleteById(id);
+        return ResponseEntity.ok("User deleted");
+    }
+
+
 
 
 
